@@ -1,0 +1,80 @@
+<div class="row" *ngIf="!dowloadComplet">
+  <div class="sm-12 md-12 lg-12 col">
+  <div class="text-center w-100">
+    <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+  </div>
+  </div>
+</div>
+<div class="row" *ngIf="dowloadComplet">
+  <div class="sm-6 md-3 lg-2 col">
+    <button routerLink="/addbook" class="margin-bottom-small">Add New</button>
+    <button routerLink="/books" class="btn-success">List</button>
+  </div>
+  <div class="sm-6 md-9 lg-10 col">
+    <h3 class="margin-bottom-large">
+      Liste des livres (Total: {{books?.length}})
+    </h3>
+    <div class="alert alert-danger margin-bottom-small" *ngIf="msg == 'supprimé'">
+      Suppression du livre N° {{id}}
+    </div>
+    <form #formSearchBook="ngForm" class="w-100 margin-bottom-small">
+      <table>
+        <tr>
+          <td>Rechercher par</td>
+          <td>
+              <input type="text" [(ngModel)]="searchText" (input)="search(formSearchBook)" name="name" value="" placeholder="nom du livre">
+          </td>
+          <td>
+              <select class="w-100 border-muted border-thick" ngModel name="categorie" id="categorie" required (click)="search(formSearchBook)">
+                <option value="0" selected>Tous</option>
+                <option *ngFor="let categorie of categories" value="{{categorie.id}}">{{categorie.name}}</option>
+              </select>
+          </td>
+        </tr>
+      </table>
+    </form>
+    <table>
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Catégorie</th>
+        <th colspan="3">Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let book of books">
+        <td>{{book.id}}</td>
+        <td [innerHtml]="book.name | highLight: searchText" *ngIf="book.name.length <= 20">{{book.name}}</td>
+        <td *ngIf="book.name.length > 20" [attr.popover-left]="book.name">
+          <span [innerHtml]="book.name | highLight: searchText">
+            {{book.name.substring(0,20)}}...
+          </span>
+        </td>
+        <td>{{book.categorie.name}}</td>
+        <td>
+          <button class="btn-danger btn-small" (click)="delete(book.id)">
+            Supprimer
+          </button>
+        </td>
+        <td>
+          <button class="btn-secondary btn-small" (click)="modify(book.id)">
+            Modifier
+          </button>
+        </td>
+        <td>
+          <a style="cursor:pointer;" (click)="getPdf(book.id, book.name)">
+            Télécharger
+          </a>
+        </td>
+      </tr>
+      <tr *ngIf="books?.length == 0">
+        <td class="alert alert-warning margin-bottom-small" colspan="5">
+          Aucun livre trouvé
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+

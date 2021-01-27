@@ -1,0 +1,26 @@
+<div class="row">
+  <div class="sm-6 md-4 lg-2 col">
+    <button routerLink="/addcategory">Add New</button>
+    <button routerLink="/categories">List</button>
+  </div>
+  <div class="sm-6 md-8 lg-10 col">
+    <h3 class="margin-bottom-large">
+      Modifier la catégorie N° {{categorie?.id}}
+    </h3>
+    <div class="alert alert-success margin-bottom-small" *ngIf="msg == 'ok'">
+      Modification effectuée avec succès
+    </div>
+    <div class="alert alert-success margin-bottom-small" *ngIf="err">
+      Impossible de modifier la catégorie
+    </div>
+    <form #formModifCategorie="ngForm">
+      <div class="form-group">
+        <input type="hidden" [ngModel]="categorie?.id" name="id">
+        <label for="paperInputs1">Name</label>
+        <input type="text" [ngModel]="categorie?.name" name="name" placeholder="name" id="paperInputs1">
+      </div>
+      <button (click)="modif(formModifCategorie.value)" class="text-center btn-small btn-secondary">Modifier</button>
+    </form>
+
+  </div>
+</div>

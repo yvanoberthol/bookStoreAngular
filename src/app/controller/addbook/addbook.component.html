@@ -1,0 +1,47 @@
+<div class="row">
+  <div class="sm-6 md-5 lg-5 col">
+    <button routerLink="/addbook" class="btn-success margin-bottom-small">Add New</button>
+    <button routerLink="/books">List</button>
+    <div class="margin-top-large">
+      <div *ngIf="msgerror" class="alert alert-danger text-center">
+        <span class="fa fa-close"></span> Veuillez soumettre un fichier .pdf
+      </div>
+      <div class="pdf-container" *ngIf="show">
+        <pdf-viewer [src]="src" [original-size]="false" [render-text]="true" [show-borders]="true"
+                    style="display: block; height: 300px" (after-load-complete)="completeLoading($event)"
+                    (error)="onError($event)"
+        ></pdf-viewer>
+      </div>
+      <div class="progress margin-top" *ngIf="progressbar > 0">
+        <div class="bar warning" [style.width.%]="progressbar">
+          {{progressbar}}%
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sm-6 md-7 lg-7 col">
+    <h3 class="margin-bottom-large">
+      Ajouter un livre
+    </h3>
+    <div class="alert alert-success margin-bottom-small" *ngIf="msg == 'ok'">
+      Ajout effectué avec succès
+    </div>
+    <div class="alert alert-danger margin-bottom-small" *ngIf="err">
+      Impossible d'ajouter un livre
+    </div>
+    <form #formBook="ngForm">
+      <div class="form-group">
+        <label for="categorie">Categorie</label>
+        <select ngModel name="categorie" id="categorie" required>
+          <option *ngFor="let categorie of categories" value="{{categorie.id}}">{{categorie.name}}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="pdf">Pdf</label>
+        <input required type="file" (change)="uploadFile()" ngModel name="pdf" placeholder="pdf" id="pdf">
+      </div>
+      <button [disabled]="disable || !formBook.valid " (click)="add(formBook)" class="text-center btn-small btn-secondary">Ajouter</button>
+    </form>
+
+  </div>
+</div>
